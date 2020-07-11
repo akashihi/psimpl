@@ -61,6 +61,9 @@ def simplify(points, tolerance, window):
     :returns: Simplified line represented as array of points.
     :rtype: array((int, int))
     """
+    if tolerance <= 0:
+        raise ValueError("Tolerance have to be positive number")
+
     if window < 3 or len(points) < window:
         return points  # Nothing to simplify here
 

@@ -82,6 +82,12 @@ def test_simplification_short_line():
     assert len(simplified_line) == 4
 
 
+def test_simplification_negative_tolerance():
+    line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
+    with pytest.raises(ValueError):
+        simplify(line.coords, -5, 6)
+
+
 def test_simplification_equal_window():
     line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
     simplified_line = simplify(line.coords, 5, 4)

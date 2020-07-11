@@ -1,7 +1,8 @@
 import math
+from typing import List, Tuple
 
 
-def distancer(a, b):
+def distancer(a: Tuple[float, float], b: Tuple[float, float]):
     """ Generates a distance function, that will calculate distance from point C
     to the line, defined by points A and B.
     See https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line for details
@@ -14,18 +15,18 @@ def distancer(a, b):
         and AB line
     :rtype: func
     """
-    dx = b[0] - a[0]
-    dy = b[1] - a[1]
-    denominator = math.sqrt(math.pow(dy, 2) + math.pow(dx, 2))
-    right_numerator = b[0] * a[1] - b[1] * a[0]
+    dx: float = b[0] - a[0]
+    dy: float = b[1] - a[1]
+    denominator: float = math.sqrt(math.pow(dy, 2) + math.pow(dx, 2))
+    right_numerator: float = b[0] * a[1] - b[1] * a[0]
 
-    def distance(c):
+    def distance(c: Tuple[float, float]):
         return math.fabs(dy * c[0] - dx * c[1] + right_numerator) / denominator
 
     return distance
 
 
-def validate_segment(segment, tolerance):
+def validate_segment(segment: List[Tuple[float, float]], tolerance: float):
     """Checks if simplification segment needs to be simplified,
     by testing distances between first-last line and other points
 
@@ -45,7 +46,7 @@ def validate_segment(segment, tolerance):
     return False
 
 
-def simplify(points, tolerance, window):
+def simplify(points: List[Tuple[float, float]], tolerance: float, window: int):
     """Simplifies line using Lang algorithm. May decrease number of points.
 
     :param points: Line represented as array of points.
@@ -66,10 +67,10 @@ def simplify(points, tolerance, window):
     if window < 3 or len(points) < window:
         return points  # Nothing to simplify here
 
-    output = []
-    pos = 0
+    output: List[Tuple[float, float]] = []
+    pos: int = 0
     while pos < len(points):
-        segment_len = window
+        segment_len: int = window
         while (
             validate_segment(points[pos : pos + 1 + segment_len], tolerance)
             and segment_len > 2

@@ -5,14 +5,14 @@ repos:
         name: isort
         stages: [commit]
         language: system
-        entry: pipenv run isort *.py
+        entry: pipenv run isort
         types: [python]
 
       - id: black
         name: black
         stages: [commit]
         language: system
-        entry: pipenv run black *.py
+        entry: pipenv run black
         types: [python]
 
       - id: flake8
@@ -36,4 +36,5 @@ repos:
         stages: [commit]
         language: system
         entry: pipenv run pytest
+        pass_filenames: false
         types: [python]

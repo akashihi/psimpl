@@ -21,7 +21,10 @@ def simplify():
 
         try:
             line_string = wkt.loads(line)
-            simplified_line = psimpl.simplify(line_string.coords, args.tolerance, args.window)
+            line_coords = []
+            for p in line_string.coords:
+                line_coords.append(p)
+            simplified_line = psimpl.simplify(line_coords, args.tolerance, args.window)
             simplified_line_string = LineString(simplified_line)
             print(simplified_line_string.wkt)
             if args.render:

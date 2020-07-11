@@ -17,10 +17,10 @@ def distancer(a, b):
     dx = b[0] - a[0]
     dy = b[1] - a[1]
     denominator = math.sqrt(math.pow(dy, 2) + math.pow(dx, 2))
-    right_numerator = b[0]*a[1] - b[1]*a[0]
+    right_numerator = b[0] * a[1] - b[1] * a[0]
 
     def distance(c):
-        return math.fabs(dy*c[0] - dx*c[1] + right_numerator)/denominator
+        return math.fabs(dy * c[0] - dx * c[1] + right_numerator) / denominator
 
     return distance
 
@@ -70,10 +70,13 @@ def simplify(points, tolerance, window):
     pos = 0
     while pos < len(points):
         segment_len = window
-        while validate_segment(points[pos:pos + 1 + segment_len], tolerance) and segment_len > 2:
+        while (
+            validate_segment(points[pos : pos + 1 + segment_len], tolerance)
+            and segment_len > 2
+        ):
             segment_len -= 1
-        output.extend(points[pos: pos + segment_len])
+        output.extend(points[pos : pos + segment_len])
         if segment_len < window:
-            del points[pos + segment_len: pos + window]
+            del points[pos + segment_len : pos + window]
         pos += segment_len
     return output

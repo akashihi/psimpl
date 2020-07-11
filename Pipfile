@@ -9,6 +9,10 @@ matplotlib = "*"
 
 [dev-packages]
 pytest = "*"
+black = "*"
+isort = "*"
+flake8 = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.8"

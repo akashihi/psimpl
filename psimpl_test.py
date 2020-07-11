@@ -1,24 +1,31 @@
 import pytest
-from psimpl import simplify, distancer, validate_segment
+
+from psimpl import distancer, simplify, validate_segment
 
 
-@pytest.mark.parametrize("a,b,c,distance", [
-    ((0, 0), (0, 10), (5, 5), 5),
-    ((0, 0), (10, 0), (5, 5), 5),
-    ((0, 0), (10, 0), (15, 5), 5),
-    ((0, 0), (10, 0), (5, -5), 5),
-])
+@pytest.mark.parametrize(
+    "a,b,c,distance",
+    [
+        ((0, 0), (0, 10), (5, 5), 5),
+        ((0, 0), (10, 0), (5, 5), 5),
+        ((0, 0), (10, 0), (15, 5), 5),
+        ((0, 0), (10, 0), (5, -5), 5),
+    ],
+)
 def test_distancer(a, b, c, distance):
     distance_function = distancer(a, b)
     actual_distance = distance_function(c)
     assert pytest.approx(actual_distance, 0.1) == distance
 
 
-@pytest.mark.parametrize("segment,tolerance,validity", [
-    ([(10, 30), (20, 10), (30, 30)], 5, True),
-    ([(10, 30), (20, 27), (30, 30)], 5, False),
-    ([(10, 30), (20, 27), (30, 30), (40, 15), (50, 30)], 5, True),
-])
+@pytest.mark.parametrize(
+    "segment,tolerance,validity",
+    [
+        ([(10, 30), (20, 10), (30, 30)], 5, True),
+        ([(10, 30), (20, 27), (30, 30)], 5, False),
+        ([(10, 30), (20, 27), (30, 30), (40, 15), (50, 30)], 5, True),
+    ],
+)
 def test_segment_validation(segment, tolerance, validity):
     assert validate_segment(segment, tolerance) == validity
 

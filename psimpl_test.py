@@ -1,6 +1,6 @@
 import pytest
 from shapely import wkt
-from psimpl import simplify, chunks
+from psimpl import simplify, chunks, distancer
 
 
 def test_chunks_sanity():
@@ -49,9 +49,44 @@ def test_empy_seq():
     assert len(chunked_seq) == 0
 
 
+@pytest.mark.parametrize("a,b,c,distance", [
+    ((0, 0), (0, 10), (5, 5), 5),
+    ((0, 0), (10, 0), (5, 5), 5),
+    ((0, 0), (10, 0), (15, 5), 5),
+    ((0, 0), (10, 0), (5, -5), 5),
+])
+def test_distancer(a, b, c, distance):
+    distance_function = distancer(a, b)
+    actual_distance = distance_function(c)
+    assert pytest.approx(actual_distance, 0.1) == distance
+
+
 def test_simplification_sanity():
-    line = wkt.loads("LINESTRING (30 10, 10 30, 40 40)")
+    line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
     simplified_line = simplify(line.coords, 5, 3)
-    assert len(simplified_line) == 2
+    assert len(simplified_line) == 3
     assert simplified_line[0] == (30, 10)
     assert simplified_line[1] == (40, 40)
+    assert simplified_line[2] == (50, 30)
+
+
+def test_simplification_small_window():
+    line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
+    simplified_line = simplify(line.coords, 5, 2)
+    assert len(simplified_line) == 4
+
+
+def test_simplification_short_line():
+    line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
+    simplified_line = simplify(line.coords, 5, 6)
+    assert len(simplified_line) == 4
+
+
+def test_simplification_equal_window():
+    line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
+    simplified_line = simplify(line.coords, 5, 4)
+    print(simplified_line)
+    assert len(simplified_line) == 3
+    assert simplified_line[0] == (30, 10)
+    assert simplified_line[1] == (10, 30)
+    assert simplified_line[2] == (50, 30)

@@ -91,8 +91,13 @@ def test_simplification_negative_tolerance():
 def test_simplification_equal_window():
     line = wkt.loads("LINESTRING (30 10, 10 30, 40 40, 50 30)")
     simplified_line = simplify(line.coords, 5, 4)
-    print(simplified_line)
     assert len(simplified_line) == 3
     assert simplified_line[0] == (30, 10)
     assert simplified_line[1] == (10, 30)
     assert simplified_line[2] == (50, 30)
+
+
+def test_simplification_complex_line():
+    line = wkt.loads("LINESTRING (10 30, 15 10, 20 15, 25 30, 30 60, 35 10, 40 40)")
+    simplified_line = simplify(line.coords, 5, 3)
+    print(simplified_line)

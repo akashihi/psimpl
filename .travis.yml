@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.8"
+install:
+  - pip install pipenv
+  - pipenv install --dev
+script:
+  - pipenv run black *py
+  - pipenv run isort *py
+  - pipenv run flake8
+  - pipenv run mypy
+  - pipenv run pytest
